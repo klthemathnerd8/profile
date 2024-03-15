@@ -3,5 +3,6 @@
   "version": "1.0.0",
   "description": "A portfolio website for showcasing projects and personal information.",
   "author": "Your Name",
-  "license": "MIT"
+  "license": "MIT",
+  "main": "index.html"
 }
