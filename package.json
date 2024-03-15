@@ -10,6 +10,6 @@
   "author": "Kevin Li",
   "license": "MIT",
   "devDependencies": {
-    "http-server": "^0.12.4"
+    "http-server": "^0.12.3"
   }
 }
