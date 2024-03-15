@@ -1,39 +1,188 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Portfolio</title>
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Portfolio</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f0f0f0;
+  }
+  .container {
+    max-width: 100%;
+    margin: 20px auto;
+    padding: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    position: relative; /* Add position relative */
+    z-index: 1; /* Ensure projects are above the canvas */
+  }
+  .tile {
+    background-color: #bbbbbb;
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  .tile h2 {
+    margin-top: 0;
+    font-size: 24px;
+  }
+  .tile p {
+    margin-bottom: 0;
+  }
+  canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #232323;
+    z-index: 0; /* Ensure canvas is behind the projects */
+  }
+  .bio {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+  }
+</style>
 </head>
 <body>
-    <div class="container">
-        <div class="bio">
-            <h2><center>About Me</center></h2>
-            <p><center>Hi! I'm a web developer that focuses on random Discord bots.</center></p>
-            <p><center><img src="https://upload.wikimedia.org/wikipedia/commons/c/c3/Python-logo-notext.svg" alt="Python Logo" style="width: 12px;"> Python - Very Fluent</center></p>
-            <p><center><img src="https://upload.wikimedia.org/wikipedia/commons/1/18/ISO_C%2B%2B_Logo.svg" alt="C++ Logo" style="width: 12px;"> C++ - Fluent</center></p>
-            <p><center><img src="https://upload.wikimedia.org/wikipedia/commons/6/61/HTML5_logo_and_wordmark.svg" alt="HTML Logo" style="width: 12px;"> HTML5 - Learning</center></p>
-        </div>
+  <div class="container">
+    <div class="bio">
+      <h2><center>About Me</center></h2>
+      <p><center>Hi! I'm a web developer that focuses on random Discord bots.</center></p>
+      <p><center><img src="https://upload.wikimedia.org/wikipedia/commons/c/c3/Python-logo-notext.svg" alt="Python Logo" style="width: 12px;"> Python - Very Fluent</center></p>
+      <p><center><img src="https://upload.wikimedia.org/wikipedia/commons/1/18/ISO_C%2B%2B_Logo.svg" alt="C++ Logo" style="width: 12px;"> C++ - Fluent</center></p>
+      <p><center><img src="https://upload.wikimedia.org/wikipedia/commons/6/61/HTML5_logo_and_wordmark.svg" alt="HTML Logo" style="width: 12px;"> HTML5 - Learning</center></p>
     </div>
+  </div>
 
-    <div class="container">
-        <div class="tile">
-            <h2>Project 1</h2>
-            <p>Description of Project 1</p>
-        </div>
-        <div class="tile">
-            <h2>Project 2</h2>
-            <p>Description of Project 2</p>
-        </div>
-        <div class="tile">
-            <h2>Project 3</h2>
-            <p>Description of Project 3</p>
-        </div>
-        <!-- Add more tiles as needed -->
-    </div>
+<div class="container">
+  <div class="tile">
+    <h2>Project 1</h2>
+    <p>Description of Project 1</p>
+  </div>
+  <div class="tile">
+    <h2>Project 2</h2>
+    <p>Description of Project 2</p>
+  </div>
+  <div class="tile">
+    <h2>Project 3</h2>
+    <p>Description of Project 3</p>
+  </div>
+  <!-- Add more tiles as needed -->
+</div>
+<canvas id="canvas"></canvas>
+<script>
+  var canvas = document.getElementById("canvas"),
+      ctx = canvas.getContext('2d');
 
-    <canvas id="canvas"></canvas>
-    <script src="script.js"></script>
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  var stars = [], // Array that contains the stars
+      FPS = 60, // Frames per second
+      x = 100, // Number of stars
+      mouse = {
+        x: 0,
+        y: 0
+      };  // mouse location
+
+  // Push stars to array
+
+  for (var i = 0; i < x; i++) {
+    stars.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      radius: Math.random() * 1 + 1,
+      vx: Math.floor(Math.random() * 50) - 25,
+      vy: Math.floor(Math.random() * 50) - 25
+    });
+  }
+
+  // Draw the scene
+
+  function draw() {
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+
+    ctx.globalCompositeOperation = "lighter";
+
+    for (var i = 0, x = stars.length; i < x; i++) {
+      var s = stars[i];
+
+      ctx.fillStyle = "#fff";
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.radius, 0, 2 * Math.PI);
+      ctx.fill();
+      ctx.fillStyle = 'black';
+      ctx.stroke();
+    }
+
+    ctx.beginPath();
+    for (var i = 0, x = stars.length; i < x; i++) {
+      var starI = stars[i];
+      ctx.moveTo(starI.x,starI.y); 
+      if(distance(mouse, starI) < 150) ctx.lineTo(mouse.x, mouse.y);
+      for (var j = 0, x = stars.length; j < x; j++) {
+        var starII = stars[j];
+        if(distance(starI, starII) < 150) {
+          //ctx.globalAlpha = (1 / 150 * distance(starI, starII).toFixed(1));
+          ctx.lineTo(starII.x,starII.y); 
+        }
+      }
+    }
+    ctx.lineWidth = 0.05;
+    ctx.strokeStyle = 'white';
+    ctx.stroke();
+  }
+
+  function distance( point1, point2 ){
+    var xs = 0;
+    var ys = 0;
+
+    xs = point2.x - point1.x;
+    xs = xs * xs;
+
+    ys = point2.y - point1.y;
+    ys = ys * ys;
+
+    return Math.sqrt( xs + ys );
+  }
+
+  // Update star locations
+
+  function update() {
+    for (var i = 0, x = stars.length; i < x; i++) {
+      var s = stars[i];
+
+      s.x += s.vx / FPS;
+      s.y += s.vy / FPS;
+
+      if (s.x < 0 || s.x > canvas.width) s.vx = -s.vx;
+      if (s.y < 0 || s.y > canvas.height) s.vy = -s.vy;
+    }
+  }
+
+  canvas.addEventListener('mousemove', function(e){
+    mouse.x = e.clientX;
+    mouse.y = e.clientY;
+  });
+
+  // Update and draw
+
+  function tick() {
+    draw();
+    update();
+    requestAnimationFrame(tick);
+  }
+
+  tick();
+</script>
 </body>
 </html>
