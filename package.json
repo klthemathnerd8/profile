@@ -1,0 +1,15 @@
+{
+  "name": "my-portfolio",
+  "version": "1.0.0",
+  "description": "Portfolio website for showcasing projects",
+  "main": "index.html",
+  "scripts": {
+    "start": "http-server -o",
+    "build": "echo 'No build steps required for a static website.'"
+  },
+  "author": "Kevin Li",
+  "license": "MIT",
+  "devDependencies": {
+    "http-server": "^0.12.4"
+  }
+}
