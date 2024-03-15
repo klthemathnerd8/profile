@@ -4,10 +4,10 @@
   "description": "Portfolio website for showcasing projects",
   "main": "index.html",
   "scripts": {
-    "start": "http-server -o",
+    "start": "npx http-server -o",
     "build": "echo 'No build steps required for a static website.'"
   },
-  "author": "Kevin Li",
+  "author": "Your Name",
   "license": "MIT",
   "devDependencies": {
     "http-server": "^0.12.3"
